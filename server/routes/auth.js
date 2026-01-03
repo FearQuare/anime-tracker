@@ -62,7 +62,7 @@ router.post('/login', async (req, res) => {
         }
 
         // Validate Password: We compare the plain text password user sent vs. the hashed one in DB
-        const isMatch = await bcrypt.compare(password, user.password);
+        const isMatch = await bcyrpt.compare(password, user.password);
         if (!isMatch) {
             return res.status(400).json({ message: 'Invalid credentials' });
         }
