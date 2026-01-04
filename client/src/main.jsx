@@ -11,13 +11,17 @@ import { AuthProvider } from './context/AuthContext.jsx'
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>
     <AuthProvider>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/profile" element={<Profile />} />
-      </Routes>
+      <div className='flex flex-col min-h-screen'>
+        <Navbar />
+        <main className='flex-1 flex flex-col'>
+          <Routes>
+            <Route path="/" element={<App />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/profile" element={<Profile />} />
+          </Routes>
+        </main>
+      </div>
     </AuthProvider>
-  </BrowserRouter>,
+  </BrowserRouter>
 )

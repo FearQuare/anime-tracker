@@ -44,7 +44,7 @@ export default function Login() {
     };
 
     return (
-        <div className='w-screen h-screen flex flex-col justify-center items-center'>
+        <div className='flex-1 w-full flex flex-col justify-center items-center'>
             <h1 className='text-3xl mb-5'>Login</h1>
             <form onSubmit={handleSubmit} className='bg-base-200 p-8 rounded-2xl flex flex-col justify-center items-center'>
                 <label className='input validator mb-2'>

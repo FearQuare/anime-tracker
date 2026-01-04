@@ -41,7 +41,7 @@ export default function Signup() {
         }
     };
     return (
-        <div className='w-screen h-screen flex flex-col justify-center items-center'>
+        <div className='w-full flex-1 flex flex-col justify-center items-center'>
             <h1 className='text-3xl mb-5'>Create Account</h1>
             <form onSubmit={handleSubmit} className='bg-base-200 rounded-2xl p-8 flex flex-col justify-center items-center'>
                 <label className='input validator mb-2'>
