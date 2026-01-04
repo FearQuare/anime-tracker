@@ -6,15 +6,18 @@ import Signup from './components/pages/Signup.jsx'
 import Login from './components/pages/Login.jsx'
 import Profile from './components/pages/Profile.jsx'
 import Navbar from './components/navigation/Navbar.jsx'
+import { AuthProvider } from './context/AuthContext.jsx'
 
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>
-    <Navbar />
-    <Routes>
-      <Route path="/" element={<App />} />
-      <Route path="/signup" element={<Signup />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/profile" element={<Profile />} />
-    </Routes>
+    <AuthProvider>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<App />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/profile" element={<Profile />} />
+      </Routes>
+    </AuthProvider>
   </BrowserRouter>,
 )

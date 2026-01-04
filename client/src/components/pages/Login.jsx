@@ -1,23 +1,25 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { AuthContext } from '../../context/AuthContext';
 
 export default function Login() {
+    // Hook to move user to another page
+    const navigate = useNavigate();
+
+    const { login, user } = useContext(AuthContext);
+
     const [formData, setFormData] = useState({
         email: '',
         password: ''
     });
 
-    // Hook to move user to another page
-    const navigate = useNavigate();
-
-    // Check if user is already logged in
     useEffect(() => {
-        // Look for the token in local storage
-        if (localStorage.getItem('token')) {
+        if (user) {
             navigate('/');
         }
-    }, [navigate]);
+    }, [user, navigate])
+
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -30,10 +32,9 @@ export default function Login() {
             const response = await axios.post('http://localhost:5000/api/auth/login', formData)
 
             // Save the token to LocalStorage (browser memory)
-            localStorage.setItem('token', response.data.token);
+            login(response.data.token, response.data.user);
 
             alert('Login Successful!');
-            console.log('Logged in:', response.data);
 
             navigate('/');
 
