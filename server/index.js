@@ -5,6 +5,7 @@ require('dotenv').config(); // Load variables from .env file
 
 // IMPORT ROUTES
 const authRoutes = require('./routes/auth');
+const userRoutes = require('./routes/user');
 
 const app = express();
 
@@ -27,6 +28,7 @@ connectDB();
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/user', userRoutes);
 
 app.get('/', (req, res) => {
   res.send('Hello from the Anime Tracker Backend!');
