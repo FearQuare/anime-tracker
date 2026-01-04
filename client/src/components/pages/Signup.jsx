@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useAlert } from '../../context/AlertContext';
 
 export default function Signup() {
     const [formData, setFormData] = useState({
@@ -8,6 +9,8 @@ export default function Signup() {
         email: '',
         password: ''
     });
+
+    const { showAlert } = useAlert();
 
     // Handle input changes
     // This updates the state whenever you type in a box
@@ -32,17 +35,19 @@ export default function Signup() {
             const response = await axios.post('http://localhost:5000/api/auth/register', formData);
 
             // If successful, alert the user
-            alert(response.data.message);
+            showAlert(response.data.message, 'success');
             console.log('Success:', response.data);
         } catch (error) {
             // If error, show the error message form the backend
-            alert(error.response?.data?.message || 'An error occurred');
+            showAlert(error.response?.data?.message || 'An error occurred', 'error');
             console.error('Error:', error);
         }
+
+        setFormData({username: '', email: '', password: ''});
     };
     return (
         <div className='w-full flex-1 flex flex-col justify-center items-center'>
-            <h1 className='text-3xl mb-5'>Create Account</h1>
+            <h1 className='text-3xl mb-5 text-primary'>Create Account</h1>
             <form onSubmit={handleSubmit} className='bg-base-200 rounded-2xl p-8 flex flex-col justify-center items-center'>
                 <label className='input validator mb-2'>
                     <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -111,12 +116,13 @@ export default function Signup() {
                         type="password"
                         name="password"
                         placeholder='Password'
-                        vaue={formData.password}
+                        value={formData.password}
                         onChange={handleChange}
                         required
                     />
                 </label>
                 <button className='btn btn-soft btn-primary' type='submit'>Sign Up</button>
+                <p className='mt-3 text-sm'>Already have an account? <a href='/login' className='link-primary'>Login</a></p>
             </form>
         </div>
     );

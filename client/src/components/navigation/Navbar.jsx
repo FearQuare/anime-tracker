@@ -29,7 +29,7 @@ export default function Navbar() {
             </div>
 
             <div className="navbar-end">
-                {user ? <button className="btn btn-soft btn-primary" onClick={logout}>Log Out</button> : <button className="btn btn-soft btn-primary" onClick={handleLogIn}>Login</button>}
+                {user ? <button className="btn btn-soft btn-primary mr-2" onClick={logout}>Log Out</button> : <button className="btn btn-soft btn-primary mr-2" onClick={handleLogIn}>Login</button>}
                 <ThemeToggle />
             </div>
         </div>

@@ -2,12 +2,15 @@ import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { AuthContext } from '../../context/AuthContext';
+import { useAlert } from '../../context/AlertContext';
 
 export default function Login() {
     // Hook to move user to another page
     const navigate = useNavigate();
 
     const { login, user } = useContext(AuthContext);
+
+    const { showAlert } = useAlert();
 
     const [formData, setFormData] = useState({
         email: '',
@@ -34,18 +37,18 @@ export default function Login() {
             // Save the token to LocalStorage (browser memory)
             login(response.data.token, response.data.user);
 
-            alert('Login Successful!');
+            showAlert('Login Successful!', 'success');
 
             navigate('/');
 
         } catch (error) {
-            alert(error.response?.data?.message || 'Login failed');
+            showAlert(error.response?.data?.message || 'Login failed', 'error');
         }
     };
 
     return (
         <div className='flex-1 w-full flex flex-col justify-center items-center'>
-            <h1 className='text-3xl mb-5'>Login</h1>
+            <h1 className='text-3xl mb-5 text-primary'>Login</h1>
             <form onSubmit={handleSubmit} className='bg-base-200 p-8 rounded-2xl flex flex-col justify-center items-center'>
                 <label className='input validator mb-2'>
                     <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -94,6 +97,7 @@ export default function Login() {
                     />
                 </label>
                 <button className='btn btn-soft btn-primary' type='submit'>Login</button>
+                <p className='mt-3 text-sm'>Don't have an account? <a href='/signup' className='link-primary'>Sign Up</a></p>
             </form>
         </div>
     )
