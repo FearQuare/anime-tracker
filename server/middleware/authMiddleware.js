@@ -18,6 +18,11 @@ const auth = (req, res, next) => {
         // This allows your Controllers to know WHICH user is logged in
         req.user = decoded;
 
+        // Check if UserId header matches the token's user id
+        if (req.header('UserId') && req.header('UserId') !== decoded.id) {
+            return res.status(401).json({ message: 'User ID does not match token' });
+        }
+
         // Move to the next step (the Controller)
         next();
 

@@ -11,7 +11,8 @@ export const AuthProvider = ({ children }) => {
         const storedUser = localStorage.getItem('user');
 
         if (token && storedUser) {
-            return JSON.parse(storedUser);
+            const parsedUser = JSON.parse(storedUser);
+            return { ...parsedUser, token: token};
         } else if (token) {
             return { token };
         }
