@@ -8,17 +8,26 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(() => {
         const token = localStorage.getItem('token');
-        return token ? { token } : null;
+        const storedUser = localStorage.getItem('user');
+
+        if (token && storedUser) {
+            return JSON.parse(storedUser);
+        } else if (token) {
+            return { token };
+        }
+        return null;
     });
 
     // Function to run when user logs in
     const login = (token, userData) => {
         localStorage.setItem('token', token);
-        setUser(userData || { token }) // Update state immedaiately
+        localStorage.setItem('user', JSON.stringify(userData));
+        setUser(userData) // Update state immedaiately
     };
 
     const logout = () => {
         localStorage.removeItem('token');
+        localStorage.removeItem('user');
         setUser(null);
     };
 

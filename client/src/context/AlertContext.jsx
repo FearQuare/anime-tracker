@@ -13,7 +13,6 @@ export const AlertProvider = ({ children }) => {
 
         // Auto-hide after 5 seconds
         setTimeout(() => {
-            console.log(message, type);
             setAlert(null);
         }, 5000);
     };
