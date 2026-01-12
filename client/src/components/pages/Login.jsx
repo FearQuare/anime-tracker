@@ -32,17 +32,26 @@ export default function Login() {
         e.preventDefault();
 
         try {
-            const response = await axios.post('http://localhost:5000/api/auth/login', formData)
+            const response = await axios.post('http://localhost:5000/api/auth/login', formData);
 
             // Save the token to LocalStorage (browser memory)
             login(response.data.token, response.data.user);
 
             showAlert('Login Successful!', 'success');
-
             navigate('/');
 
         } catch (error) {
-            showAlert(error.response?.data?.message || 'Login failed', 'error');
+            console.error("CAUGHT ERROR on Login:", error);
+
+            if (error.response) {
+                console.log("SERVER RESPONSE STATUS:", error.response.status);
+                console.log("SERVER RESPONSE DATA:", error.response.data);
+
+                showAlert(error.response.data.message || 'Login failed', 'error');
+            } else {
+                console.log("NETWORK ERROR (Server might be down)");
+                showAlert('Network Error', 'error');
+            }
         }
     };
 
@@ -91,7 +100,7 @@ export default function Login() {
                         type="password"
                         name="password"
                         placeholder='Password'
-                        vaue={formData.password}
+                        value={formData.password}
                         onChange={handleChange}
                         required
                     />

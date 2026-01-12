@@ -1,11 +1,15 @@
-import { useEffect, useContext } from 'react';
+import { useEffect, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { AuthContext } from '../../context/AuthContext';
+import ProfileCard from '../ProfileCard';
 
 export default function Profile() {
     const navigate = useNavigate();
     const { user } = useContext(AuthContext);
+    const [userData, setUserData] = useState(null);
+
+    console.log('token init Profile:', JSON.stringify(user))
 
     useEffect(() => {
         if (!user || !user.token) {
@@ -23,7 +27,7 @@ export default function Profile() {
                     }
                 });
 
-                console.log(result)
+                setUserData(result.data);
             } catch (error) {
                 console.log("Frontend: Error", error);
             }
@@ -34,8 +38,8 @@ export default function Profile() {
     }, [navigate, user]);
 
     return (
-        <div>
-            Profile
+        <div className='flex m-3'>
+            <ProfileCard userData={userData} />
         </div>
     )
 }
