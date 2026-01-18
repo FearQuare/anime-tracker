@@ -18,6 +18,10 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true,
         minglength: 6
+    },
+    profilePicture: {
+        type: String,
+        required: false
     }
 }, { timestamps: true }); // Automatically adds 'createdAt' and 'updatedAt' times
 

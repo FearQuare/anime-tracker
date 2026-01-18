@@ -1,6 +1,6 @@
 import UploadProfilePicture from "./modals/UploadProfilePicture"
 
-export default function ProfileCard({ userData }) {
+export default function ProfileCard({ userData, setUserData }) {
     return (
         <div className="flex flex-col items-center">
             <h1 className="text-2xl mb-3">Profile Information</h1>
@@ -8,13 +8,13 @@ export default function ProfileCard({ userData }) {
                 <div className="card w-56 flex flex-col items-center">
                     <div className="avatar p-3">
                         <div className="ring-primary ring-offset-base-100 w-24 rounded-full ring-2 ring-offset-2">
-                            {userData?.profileImage ? <img src={userData.profileImage}/> : <img src="default-profile-image.jpg" onClick={()=>document.getElementById('upload_profile_picture_modal').showModal()}/>}
+                            {userData?.profilePicture ? <img src={userData.profilePicture} onClick={() => document.getElementById('upload_profile_picture_modal').showModal()} /> : <img src="default-profile-image.jpg" onClick={() => document.getElementById('upload_profile_picture_modal').showModal()} />}
                         </div>
                     </div>
                     <p className="mb-3">{userData?.username}</p>
                 </div>
             </div>
-            <UploadProfilePicture />
+            <UploadProfilePicture setUserData={setUserData} />
         </div>
     )
 }

@@ -1,13 +1,16 @@
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useRef, useEffect, useContext } from "react";
 import Cropper from 'react-easy-crop';
 import { getCroppedImg } from "../../utils/cropUtils";
+import axios from "axios";
+import { AuthContext } from '../../context/AuthContext';
 
-export default function UploadProfilePicture() {
+export default function UploadProfilePicture({ setUserData }) {
     const [preview, setPreview] = useState(null);
     const [error, setError] = useState('');
     const [crop, setCrop] = useState({ x: 0, y: 0 });
     const [zoom, setZoom] = useState(1);
     const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+    const { user } = useContext(AuthContext);
 
     // Keep a reference of the fileInput to reset its value when the modal is closed
     const fileInputRef = useRef(null);
@@ -64,7 +67,7 @@ export default function UploadProfilePicture() {
         setPreview(objectUrl);
     }
 
-    const onCropComplete = useCallback((croppedAreaPixels) => {
+    const onCropComplete = useCallback((_croppedArea, croppedAreaPixels) => {
         setCroppedAreaPixels(croppedAreaPixels);
     }, []);
 
@@ -73,21 +76,44 @@ export default function UploadProfilePicture() {
             // 1. Generate the new cropped file
             const croppedBlob = await getCroppedImg(preview, croppedAreaPixels);
 
-            // 2. Create a "File" object from the Blob (helpful for uploading)
+            // 2. Create a "File" object
             const croppedFile = new File([croppedBlob], "profile_cropped.jpg", { type: "image/jpeg" });
 
-            // 3. DEBUG: Show success and log the file
-            console.log("Ready to upload:", croppedFile);
-            alert("Cropped image generated! Check console.");
-            
-            // TODO: Send 'croppedFile' to your backend here
+            // 3. Prepare form data
+            const formData = new FormData();
+            formData.append('profilePicture', croppedFile);
+
+            console.log("Frontend: Uploading...", user.token);
+
+            // 4. Send to Backend
+            const result = await axios.post('http://localhost:5000/api/user/uploadProfilePicture',
+                formData,
+                {
+                    headers: {
+                        'Authorization': user.token,
+                        'UserId': user.id
+                    }
+                });
+
+            // 5. UPDATE THE UI INSTANTLY
+            // Your backend returns: { message: "...", user: { ... } }
+            // We take that updated user and inject it into the Profile state.
+            setUserData(result.data.user);
+
+            // 6. Close the modal automatically
+            document.getElementById('upload_profile_picture_modal').close();
+
+            // 7. Success Alert
+            alert("Upload Successful!");
+
+            // (Optional) Reset internal modal state
+            resetModal();
 
         } catch (e) {
             console.error(e);
-            setError("Failed to crop image");
+            setError("Failed to upload image");
         }
     };
-
     return (
         <dialog id="upload_profile_picture_modal" className="modal">
             <div className="modal-box">

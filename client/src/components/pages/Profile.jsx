@@ -39,7 +39,7 @@ export default function Profile() {
 
     return (
         <div className='flex m-3'>
-            <ProfileCard userData={userData} />
+            <ProfileCard userData={userData} setUserData={setUserData} />
         </div>
     )
 }

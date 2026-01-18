@@ -8,7 +8,7 @@ export const createImage = (url) =>
     });
 
 export async function getCroppedImg(imageSrc, pixelCrop) {
-    const image = createImage(imageSrc);
+    const image = await createImage(imageSrc);
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
 
