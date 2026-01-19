@@ -73,34 +73,52 @@ const setUserProfilePicture = async (req, res) => {
 }
 
 const changePassword = async (req, res) => {
-    const userId = req.user.id;
-    console.log("Controller: Password Change is started for", userId);
+    try {
+        const userId = req.user.id;
+        const { oldPassword, newPassword } = req.body;
 
-    const { oldPassword, newPassword } = req.body;
+        console.log("Controller: Password Change started for", userId);
 
-    const currentPassword = await User.findById(userId).select('password');
-
-    const isMatch = await bcrypt.compare(oldPassword, currentPassword.password);
-
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(newPassword, salt);
-
-    if (!isMatch) {
-        res.status(400).json({
-            message: "Please use the same password you've logged in with."
-        });
-    } else {
-        try {
-            await User.findByIdAndUpdate(
-                userId,
-                { password: hashedPassword }
-            );
-
-            res.json({ message: "Password successfully changed!"})
-        } catch (error) {
-            console.error("Update Password Error:", error);
-            res.status(500).json({ message: "Server Error during password change" });
+        // Validate if both fields exist
+        if (!oldPassword || !newPassword) {
+            return res.status(400).json({
+                message: "Both old and new passwords are required."
+            });
         }
+
+        // Validate if new password has at least 8 characters lenght
+        if (newPassword.length < 8) {
+            return res.status(400).json({
+                message: "New password must be at least 8 characters."
+            });
+        }
+
+        // Get User (and explicitly ask for password, as it's usually excluded)
+        const user = await User.findById(userId).select('+password');
+
+        if (!user) {
+            return res.status(400).json({ message: "User not found." });
+        }
+
+        // Verify if old password match with current password
+        const isMatch = await bcrypt.compare(oldPassword, user.password);
+
+        if(!isMatch) {
+            return res.status(400).json({ message: "Invalid old password." });
+        }
+
+        // Hash the new password
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+        // Update Database
+        await User.findByIdAndUpdate(userId, { password: hashedPassword });
+
+        console.log("Success: Password updated.");
+        res.json({ message: "Password successfully changed!" });
+    } catch (error) {
+        console.error("Update Password Error:", error);
+        res.status(500).json({ message: "Server Error during password change" });
     }
 }
 
