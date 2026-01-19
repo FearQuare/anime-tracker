@@ -3,11 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { AuthContext } from '../../context/AuthContext';
 import ProfileCard from '../ProfileCard';
+import Settings from './Settings';
 
 export default function Profile() {
     const navigate = useNavigate();
     const { user } = useContext(AuthContext);
     const [userData, setUserData] = useState(null);
+    const [selectedSection, setSectionSelected] = useState('');
 
     console.log('token init Profile:', JSON.stringify(user))
 
@@ -38,8 +40,9 @@ export default function Profile() {
     }, [navigate, user]);
 
     return (
-        <div className='flex m-3'>
-            <ProfileCard userData={userData} setUserData={setUserData} />
+        <div className='flex gap-3 m-3'>
+            <ProfileCard userData={userData} setUserData={setUserData} setSectionSelected={setSectionSelected} sectionSelected={selectedSection} />
+            {selectedSection == 'settings' ? <Settings /> : <></>}
         </div>
     )
 }

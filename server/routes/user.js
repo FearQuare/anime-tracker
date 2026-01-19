@@ -6,8 +6,9 @@ const multer = require('multer');
 // Config multer
 const upload = multer({ storage: multer.memoryStorage() });
 
-const { getUserProfile, setUserProfilePicture } = require('../controllers/userController');
+const { getUserProfile, setUserProfilePicture, changePassword } = require('../controllers/userController');
 
 router.get('/currentUser', authMiddleware, getUserProfile);
-router.post('/uploadProfilePicture', authMiddleware, upload.single('profilePicture'), setUserProfilePicture);
+router.post('/currentUser/uploadProfilePicture', authMiddleware, upload.single('profilePicture'), setUserProfilePicture);
+router.post('/currentUser/changePassword', authMiddleware, changePassword);
 module.exports = router;

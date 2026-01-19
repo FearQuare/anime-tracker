@@ -86,7 +86,7 @@ export default function UploadProfilePicture({ setUserData }) {
             console.log("Frontend: Uploading...", user.token);
 
             // 4. Send to Backend
-            const result = await axios.post('http://localhost:5000/api/user/uploadProfilePicture',
+            const result = await axios.post('http://localhost:5000/api/user/currentUser/uploadProfilePicture',
                 formData,
                 {
                     headers: {

@@ -1,3 +1,4 @@
+const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 const cloudinary = require('../config/cloudinary');
 
@@ -67,8 +68,40 @@ const setUserProfilePicture = async (req, res) => {
         });
     } catch (error) {
         console.error("Upload Error:", error);
-        res.status(500).json({ message: "Server Error during upload"});
+        res.status(500).json({ message: "Server Error during upload" });
     }
 }
 
-module.exports = { getUserProfile, setUserProfilePicture };
+const changePassword = async (req, res) => {
+    const userId = req.user.id;
+    console.log("Controller: Password Change is started for", userId);
+
+    const { oldPassword, newPassword } = req.body;
+
+    const currentPassword = await User.findById(userId).select('password');
+
+    const isMatch = await bcrypt.compare(oldPassword, currentPassword.password);
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    if (!isMatch) {
+        res.status(400).json({
+            message: "Please use the same password you've logged in with."
+        });
+    } else {
+        try {
+            await User.findByIdAndUpdate(
+                userId,
+                { password: hashedPassword }
+            );
+
+            res.json({ message: "Password successfully changed!"})
+        } catch (error) {
+            console.error("Update Password Error:", error);
+            res.status(500).json({ message: "Server Error during password change" });
+        }
+    }
+}
+
+module.exports = { getUserProfile, setUserProfilePicture, changePassword };
