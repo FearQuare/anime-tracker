@@ -18,7 +18,7 @@ export default function ProfileCard({ userData, setUserData, setSectionSelected,
                     <p className="text-base-content">{userData?.username}</p>
                 </div>
                 <div className="divider"></div>
-                {sectionSelected == 'settings' ? <button className="btn disabled w-full rounded-lg hover:cursor-not-allowed">Settings</button> : <button className="btn btn-primary w-full" onClick={handleSettingsSelected}>Settings</button>}
+                {sectionSelected == 'settings' ? <button className="btn disabled w-full rounded-lg hover:cursor-not-allowed">Settings</button> : <button className="btn btn-soft btn-primary w-full" onClick={handleSettingsSelected}>Settings</button>}
             </div>
             <UploadProfilePicture setUserData={setUserData} />
         </div>
