@@ -32,8 +32,7 @@ export default function ChangeEmail() {
             showAlert(result.data.message, 'success');
 
             setFormData({
-                oldPassword: '',
-                newPassword: ''
+                email: '',
             });
         } catch (e) {
             showAlert(e.response.data.message, 'error');

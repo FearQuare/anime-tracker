@@ -103,7 +103,7 @@ const changePassword = async (req, res) => {
         // Verify if old password match with current password
         const isMatch = await bcrypt.compare(oldPassword, user.password);
 
-        if(!isMatch) {
+        if (!isMatch) {
             return res.status(400).json({ message: "Invalid old password." });
         }
 
@@ -122,4 +122,22 @@ const changePassword = async (req, res) => {
     }
 }
 
-module.exports = { getUserProfile, setUserProfilePicture, changePassword };
+const changeEmail = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const { email } = req.body;
+
+        console.log("changeEmail endpoint started for", userId, " request to change email to", email, "received.");
+
+        const user = await User.findById(userId).select('+email');
+
+        await User.findByIdAndUpdate(userId, { email: email });
+
+        res.json({ message: "Email successfully changed!" });
+    } catch (error) {
+        console.error("Update Email Error:", error);
+        res.status(500).json({ message: "Server Error during email change" });
+    }
+}
+
+module.exports = { getUserProfile, setUserProfilePicture, changePassword, changeEmail };

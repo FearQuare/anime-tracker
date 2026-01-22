@@ -11,8 +11,6 @@ export default function Profile() {
     const [userData, setUserData] = useState(null);
     const [selectedSection, setSectionSelected] = useState('');
 
-    console.log('token init Profile:', JSON.stringify(user))
-
     useEffect(() => {
         if (!user || !user.token) {
             navigate('/login');
@@ -21,7 +19,6 @@ export default function Profile() {
 
         const retrieveProfileData = async () => {
             try {
-                console.log('Frontend: Attempting to fetch data ...');
                 const result = await axios.get('http://localhost:5000/api/user/currentUser', {
                     headers: {
                         'Authorization': user.token,
