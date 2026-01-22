@@ -97,7 +97,7 @@ export default function ChangePassword() {
                         required
                     />
                 </label>
-                <button className='btn btn-primary w-64 mb-3' type='submit'>Change Password</button>
+                <button className='btn btn-primary w-64' type='submit'>Change Password</button>
             </form>
         </div>
     )
