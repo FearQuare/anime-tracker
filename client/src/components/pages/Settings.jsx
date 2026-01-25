@@ -12,7 +12,7 @@ export default function Settings({ setSectionSelected }) {
                 <p>Settings</p>
                 <CircleX size={16} className="hover:cursor-pointer" onClick={handleClose}/>
             </div>
-            <div className="bg-base-300 rounded-b-2xl rounded-tr-2xl">
+            <div className="bg-base-300 rounded-b-2xl rounded-tr-2xl pb-5">
                 <ChangePassword />
                 <div className="divider"></div>
                 <ChangeEmail />
