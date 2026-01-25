@@ -10,6 +10,9 @@ export default function Profile() {
     const { user } = useContext(AuthContext);
     const [userData, setUserData] = useState(null);
     const [selectedSection, setSectionSelected] = useState('');
+    const [isSmallScreen, setIsSmallScreen] = useState(false);
+
+    const MD_BREAKPOINT = 768;
 
     useEffect(() => {
         if (!user || !user.token) {
@@ -32,14 +35,25 @@ export default function Profile() {
             }
         };
 
-        retrieveProfileData()
+        retrieveProfileData();
 
+        const checkScreenSize = () => {
+            setIsSmallScreen(window.innerWidth < MD_BREAKPOINT);
+        };
+
+        checkScreenSize();
+
+        window.addEventListener('resize', checkScreenSize);
+
+        return () => {
+            window.removeEventListener('resize', checkScreenSize);
+        };
     }, [navigate, user]);
 
     return (
         <div className='flex gap-3 m-3'>
-            <ProfileCard userData={userData} setUserData={setUserData} setSectionSelected={setSectionSelected} sectionSelected={selectedSection} />
-            {selectedSection == 'settings' ? <Settings /> : <></>}
+            {(selectedSection && isSmallScreen) ? <></> : <ProfileCard userData={userData} setUserData={setUserData} setSectionSelected={setSectionSelected} sectionSelected={selectedSection} />}
+            {selectedSection == 'settings' ? <Settings setSectionSelected={setSectionSelected} /> : <></>}
         </div>
     )
 }

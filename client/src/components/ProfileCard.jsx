@@ -6,7 +6,7 @@ export default function ProfileCard({ userData, setUserData, setSectionSelected,
     }
 
     return (
-        <div className="flex flex-col items-center h-full w-1/5">
+        <div className="flex flex-col items-center h-full w-full md:w-3/10 lg:w-1/5">
             <h1 className="text-2xl mb-3">Profile Information</h1>
             <div className="card bg-base-300 w-full shadow-sm text-primary flex flex-col items-center p-3">
                 <div className="card flex flex-col items-center">
